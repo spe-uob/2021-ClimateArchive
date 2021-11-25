@@ -19,10 +19,4 @@ public class ClimateArchiveApplication extends SpringBootServletInitializer {
         SpringApplication.run(ClimateArchiveApplication.class, args);
     }
 
-    @GetMapping("/")
-    @ResponseBody
-    public String test() {
-        return "Welcome to our server";
-    }
-
 }
