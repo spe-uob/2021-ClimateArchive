@@ -14,6 +14,13 @@
     <packaging>war</packaging>
     <name>climatearchive</name>
     <description>climatearchive</description>
+    <repositories>
+        <repository>
+            <id>unidata-all</id>
+            <name>Unidata All</name>
+            <url>https://artifacts.unidata.ucar.edu/repository/unidata-all/</url>
+        </repository>
+    </repositories>
     <properties>
         <java.version>11</java.version>
         <start-class>org.climatearchive.climatearchive.ClimateArchiveApplication</start-class>
@@ -32,6 +39,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/edu.ucar/cdm-core -->
+        <dependency>
+            <groupId>edu.ucar</groupId>
+            <artifactId>cdm-core</artifactId>
+            <version>5.4.2</version>
         </dependency>
     </dependencies>
 
