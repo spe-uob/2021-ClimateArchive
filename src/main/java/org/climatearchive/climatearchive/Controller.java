@@ -22,7 +22,7 @@ public class Controller {
     @ResponseBody
     public String test(
 //            @RequestParam("model") String model,
-            @RequestParam("lat") int lat, @RequestParam("lon") int lon
+//            @RequestParam("lat") int lat, @RequestParam("lon") int lon
     ) {
         try (NetcdfFile ncfile = NetcdfFiles.open("./data/tEyea/climate/teyeaa.pdclann.nc")) {
             Variable lats = ncfile.findVariable("latitude");
@@ -32,10 +32,10 @@ public class Controller {
             if (temp == null || rain == null || lats == null || lons == null) {
                 return "Invalid variable name";
             }
-            Point lookup = findClosestPoint(lat, lon, lats, lons);
-            return temp.read().toString();
+//            Point lookup = findClosestPoint(lat, lon, lats, lons);
+            return temp.read().reduce().toString();
         } catch (IOException e) {
-            System.out.println(e);
+            System.out.println(e.getMessage());
             return "Model not found";
         }
     }
