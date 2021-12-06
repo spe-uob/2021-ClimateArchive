@@ -9,6 +9,7 @@ import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFiles;
 import ucar.nc2.Variable;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -18,8 +19,8 @@ public class Controller {
     @ResponseBody
     public String test(
 //            @RequestParam("model") String model, @RequestParam("lat") int lat, @RequestParam("lon") int lon
-    ) throws FileNotFoundException {
-        try (NetcdfFile ncfile = NetcdfFiles.open("./resources/tEyea/climate/teyeaa.pdclann.nc")) {
+    ) {
+        try (NetcdfFile ncfile = NetcdfFiles.open("./data/tEyea/climate/teyeaa.pdclann.nc")) {
             Variable temp = ncfile.findVariable(("temp_mm_1_5m"));
             Variable rain = ncfile.findVariable(("precip_mm_srf"));
             if (temp == null || rain == null) {
