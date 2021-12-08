@@ -23,3 +23,5 @@ Stakeholders:
 
     A researcher / individual interested in the data, I should be able to select a point on the globe on the already
     provided climate change model in order to extract point data for a selected location and time period
+    
+Note: we are mainly working on our client's private repository to add features to climatearchive.org and on a backend server to provide access to underlying climate data.
