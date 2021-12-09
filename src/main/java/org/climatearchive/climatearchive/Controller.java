@@ -1,9 +1,6 @@
 package org.climatearchive.climatearchive;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFiles;
 import ucar.nc2.Variable;
@@ -12,6 +9,7 @@ import java.awt.*;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
     @GetMapping("/getData")
     @ResponseBody
@@ -32,7 +30,7 @@ public class Controller {
                 Point lookup = findClosestPoint(lat, lon, (float[]) lats.read().copyTo1DJavaArray(), (float[]) lons.read().copyTo1DJavaArray());
                 float[][] tempData = (float[][]) temp.read().reduce().copyToNDJavaArray();
                 float[][] rainData = (float[][]) rain.read().reduce().copyToNDJavaArray();
-                result.append("\n").append(tempData[lookup.x][lookup.y]).append(",").append(rainData[lookup.x][lookup.y]);
+                result.append("\n").append(field).append(",").append(tempData[lookup.x][lookup.y]).append(",").append(rainData[lookup.x][lookup.y]);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }

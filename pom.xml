@@ -11,7 +11,7 @@
     <groupId>org.climatearchive</groupId>
     <artifactId>climatearchive</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>climatearchive</name>
     <description>climatearchive</description>
     <repositories>
