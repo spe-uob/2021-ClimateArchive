@@ -21,7 +21,10 @@ Stakeholders:
 
   User Stories :
 
-    A researcher / individual interested in the data, I should be able to select a point on the globe on the already
-    provided climate change model in order to extract point data for a selected location and time period
+    A researcher / individual interested in the data, I should be able to:
+        -select a point on the globe on the alreadyprovided climate change model in order to extract point data for a selected location and time period.
+        -view and compare graphs generated from comparing these data points.
+        -download datasets generated from certain parameters
+        -share datasets/graphs generated at specific points with other individuals
     
 Note: we are mainly working on our client's private repository to add features to climatearchive.org and on a backend server to provide access to underlying climate data.
