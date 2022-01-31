@@ -15,9 +15,4 @@ class ClimateArchiveApplicationTests {
     void testBasicDataGetting() {
         assertEquals(1, 1);
     }
-
-    @Test
-    void testBasicDataGetting2() {
-        assertEquals(1, 2);
-    }
 }
