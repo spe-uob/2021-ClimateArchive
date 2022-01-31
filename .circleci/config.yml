@@ -18,11 +18,6 @@ jobs:
       - run:
           name: Run mvn tests
           command: mvn test
-      - run:
-          name: Generate Results
-          command: mvn surefire-report:report-only
-      - store_test_results:
-          path: target/site
 
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
