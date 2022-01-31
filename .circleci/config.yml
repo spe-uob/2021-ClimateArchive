@@ -20,7 +20,7 @@ jobs:
           command: mvn test
       - run:
           name: Generate Results
-          command: mvn surefire-report:report
+          command: mvn surefire-report:report-only
       - store_test_results:
           path: target/site
 
