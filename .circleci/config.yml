@@ -26,7 +26,7 @@ orbs:
 workflows:
   maven_test:
     jobs:
-      -maven/test # checkout, build, test, and upload test results
+      - maven/test # checkout, build, test, and upload test results
   say-hello-workflow:
     jobs:
       - say-hello
