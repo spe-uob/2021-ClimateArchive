@@ -48,7 +48,7 @@ jobs:
 workflows:
   maven_test:
     jobs:
-      - maven/test
+      - maventest
        # test_result_path: target/surefire-reports  # checkout, build, test, and upload test results
   say-hello-workflow:
     jobs:
