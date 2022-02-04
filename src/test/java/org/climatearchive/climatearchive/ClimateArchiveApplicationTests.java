@@ -38,5 +38,33 @@ class ClimateArchiveApplicationTests {
                 .andDo(print())
                 .andExpect(status().is(400))
                 .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=-91&lon=50"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=90&lon=357"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for longitude between 0.0 & 356.25")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=90&lon=-1"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for longitude between 0.0 & 356.25")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=91&lon=-1"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=91&lon=357"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=-91&lon=-1"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
+        mockMvc.perform(get("/getData?model=tEyea&lat=-91&lon=357"))
+                .andDo(print())
+                .andExpect(status().is(400))
+                .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
     }
 }

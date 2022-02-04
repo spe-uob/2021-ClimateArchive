@@ -86,16 +86,5 @@ public class Controller {
         return ("Parameter " + '"' + e.getParameterName() + '"' + " not provided");
     }
 
-    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
-    public String handleIndexOutOfBounds(@NotNull ArrayIndexOutOfBoundsException e) {
-        return e.getMessage();
-    }
-
-    @ExceptionHandler(FileNotFoundException.class)
-    public String handleFileNotFound(@NotNull FileNotFoundException e) {
-        return e.getMessage();
-    }
-
-
 }
 
