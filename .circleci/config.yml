@@ -19,9 +19,7 @@ jobs:
           key: maven-{{ checksum "/tmp/maven_cache_seed" }}
       - run:
           name: Run mvn tests
-          command: |
-            mkdir -p ./test-results/junit
-            mvn test 
+          command: mvn test 
       # Save artifacts
       - store_artifacts:
           path: ./target/surefire-reports
@@ -48,8 +46,7 @@ jobs:
 workflows:
   maven_test:
     jobs:
-      - maventest
-       # test_result_path: target/surefire-reports  # checkout, build, test, and upload test results
+      - maventest # checkout, build, test, and upload test results
   say-hello-workflow:
     jobs:
       - say-hello
