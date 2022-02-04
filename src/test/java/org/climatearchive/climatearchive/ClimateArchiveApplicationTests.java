@@ -89,6 +89,6 @@ class ClimateArchiveApplicationTests {
         mockMvc.perform(get("/getData?model=tEyea&lat=-91&lon=357"))
                 .andDo(print())
                 .andExpect(status().is(400))
-                .andExpect(content().string(containsString("Please selct a value for latitude between -90.0 & 90.0")));
+                .andExpect(content().string(containsString("Please select a value for latitude between -90.0 & 90.0")));
     }
 }
