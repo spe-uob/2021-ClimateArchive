@@ -17,7 +17,7 @@ jobs:
           key: maven-{{ checksum "/tmp/maven_cache_seed" }}
       - run:
           name: Run mvn tests
-          command: mvn test
+          command: mvn test | mkdir tmp/test-reports
       # Save artifacts
       - store_artifacts:
           path: /tmp/artifacts
