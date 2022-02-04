@@ -50,14 +50,14 @@ public class Controller {
                     float[][] rainData = (float[][]) rain.read().reduce().copyToNDJavaArray();
                     result.append("\n").append(field).append(",").append(tempData[lookup.x][lookup.y]).append(",").append(rainData[lookup.x][lookup.y]);
                 } catch (NullPointerException e) {
-                    return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("Missing data.", HttpStatus.BAD_REQUEST);
                 } catch (IOException e) {
                     return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
                 }
             }
             return new ResponseEntity<>(result.toString(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Model " + "'"  + model + "'" + " not found.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Model " + '"'  + model + '"' + " not found.", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -82,8 +82,8 @@ public class Controller {
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public String handleMissingParams(@NotNull MissingServletRequestParameterException e) {
-        return ("Parameter " + '"' + e.getParameterName() + '"' + " not provided");
+    public ResponseEntity<String> handleMissingParams(@NotNull MissingServletRequestParameterException e) {
+        return new ResponseEntity<>("Parameter " + '"' + e.getParameterName() + '"' + " not provided.", HttpStatus.BAD_REQUEST);
     }
 
 }
