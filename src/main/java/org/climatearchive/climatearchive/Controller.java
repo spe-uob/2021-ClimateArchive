@@ -1,6 +1,8 @@
 package org.climatearchive.climatearchive;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import ucar.nc2.NetcdfFile;
@@ -21,11 +23,11 @@ public class Controller {
 
     @GetMapping("/getData")
     @ResponseBody
-    public String test(
+    public ResponseEntity<Object> test(
             @RequestParam("model") String model,
             @RequestParam("lat") float lat,
             @RequestParam("lon") float lon
-    ) throws FileNotFoundException {
+    ) {
         if (modelFormat.matcher(model).find()) {
             StringBuilder result = new StringBuilder("field,temp,rain");
             for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
@@ -48,14 +50,14 @@ public class Controller {
                     float[][] rainData = (float[][]) rain.read().reduce().copyToNDJavaArray();
                     result.append("\n").append(field).append(",").append(tempData[lookup.x][lookup.y]).append(",").append(rainData[lookup.x][lookup.y]);
                 } catch (NullPointerException e) {
-                    return "Missing data";
+                    return new ResponseEntity<>("Missing data", HttpStatus.BAD_REQUEST);
                 } catch (IOException e) {
-                    return e.getMessage();
+                    return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
                 }
             }
-            return result.toString();
+            return new ResponseEntity<>(result.toString(), HttpStatus.OK);
         } else {
-            throw new FileNotFoundException("Model " + "'"  + model + "'" + " not found.");
+            return new ResponseEntity<>("Model " + "'"  + model + "'" + " not found.", HttpStatus.BAD_REQUEST);
         }
     }
 
