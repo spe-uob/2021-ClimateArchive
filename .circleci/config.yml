@@ -17,15 +17,16 @@ jobs:
           key: maven-{{ checksum "/tmp/maven_cache_seed" }}
       - run:
           name: Run mvn tests
-          command: mvn test | mkdir -p tmp/test-reports
+          command: |
+            mkdir -p ./test-results/junit
+            mvn test 
       # Save artifacts
       - store_artifacts:
-          path: /tmp/artifacts
-          destination: build
+          path: ./test-results/junit
 
       # Upload test results
       - store_test_results:
-          path: /tmp/test-reports
+          path: ./test-results
 
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
