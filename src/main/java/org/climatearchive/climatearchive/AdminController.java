@@ -1,5 +1,6 @@
 package org.climatearchive.climatearchive;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +14,7 @@ import java.util.List;
 public class AdminController {
 
     @PostMapping
-    public ResponseEntity<Object> addModels(@RequestBody List<String> models) { // add models to sqlite db
+    public ResponseEntity<Object> addModels(@RequestBody @NotNull List<String> models) { // add models to sqlite db
         List<String> failedModels = new ArrayList<>();
         for (String m: models) {
             // add model m to sql database
