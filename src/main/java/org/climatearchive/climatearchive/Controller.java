@@ -25,7 +25,7 @@ public class Controller {
             @RequestParam("model") String model,
             @RequestParam("lat") float lat,
             @RequestParam("lon") float lon
-    ) {
+    ) throws FileNotFoundException {
         if (modelFormat.matcher(model).find()) {
             StringBuilder result = new StringBuilder("field,temp,rain");
             for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
@@ -33,10 +33,10 @@ public class Controller {
                     float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable("latitude")).read().copyTo1DJavaArray();
                     float[] lons = (float[]) Objects.requireNonNull(ncfile.findVariable("longitude")).read().copyTo1DJavaArray();
                     if (lat > lats[0] || lat < lats[lats.length - 1]) { //todo change lat to mod so that all values are accepted
-                        return ("Please select a value for latitude between " + lats[lats.length - 1] + " & " + lats[0]);
+                        throw new ArrayIndexOutOfBoundsException("Please select a value for latitude between " + lats[lats.length - 1] + " & " + lats[0]);
                     }
                     if (lon < lons[0] || lon > lons[lons.length - 1]) { //todo change lon to mod so that all values are accepted
-                        return ("Please select a value for longitude between " + lons[0] + " & " + lons[lons.length - 1]);
+                        throw new ArrayIndexOutOfBoundsException("Please select a value for longitude between " + lons[0] + " & " + lons[lons.length - 1]);
                     }
                     Variable temp = ncfile.findVariable(("temp_mm_1_5m"));
                     Variable rain = ncfile.findVariable(("precip_mm_srf"));
@@ -47,8 +47,6 @@ public class Controller {
                     float[][] tempData = (float[][]) temp.read().reduce().copyToNDJavaArray();
                     float[][] rainData = (float[][]) rain.read().reduce().copyToNDJavaArray();
                     result.append("\n").append(field).append(",").append(tempData[lookup.x][lookup.y]).append(",").append(rainData[lookup.x][lookup.y]);
-                } catch (FileNotFoundException e) {
-                    return "Model " + '"' + model + '"' + " not found";
                 } catch (NullPointerException e) {
                     return "Missing data";
                 } catch (IOException e) {
@@ -57,7 +55,7 @@ public class Controller {
             }
             return result.toString();
         } else {
-            return "Invalid model id";
+            throw new FileNotFoundException("Model " + "'"  + model + "'" + " not found.");
         }
     }
 
@@ -85,6 +83,17 @@ public class Controller {
     public String handleMissingParams(@NotNull MissingServletRequestParameterException e) {
         return ("Parameter " + '"' + e.getParameterName() + '"' + " not provided");
     }
+
+    @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
+    public String handleIndexOutOfBounds(@NotNull ArrayIndexOutOfBoundsException e) {
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public String handleFileNotFound(@NotNull FileNotFoundException e) {
+        return e.getMessage();
+    }
+
 
 }
 
