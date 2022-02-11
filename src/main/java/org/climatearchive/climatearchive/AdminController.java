@@ -35,11 +35,11 @@ public class AdminController {
 //            return new ResponseEntity<>("Couldn't add any models to DB", HttpStatus.EXPECTATION_FAILED);
 //        }
         String modelID = "tests";
-        List<Model> r = modelDataBase.query("SELECT * FROM model_data", (rs, rowNum) -> new Model(
+        Model r = modelDataBase.queryForObject("SELECT * FROM model_data WHERE model_name = ?", (rs, rowNum) -> new Model(
                 rs.getString("model_name"),
                 rs.getString("latitude_value"),
                 rs.getString("longitude_value")
-        ));
+        ), modelID);
         return new ResponseEntity<>(r, HttpStatus.OK);
     }
 }
