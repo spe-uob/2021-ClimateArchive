@@ -1,5 +1,6 @@
 package org.climatearchive.climatearchive;
 
+import org.climatearchive.climatearchive.modeldb.Model;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,14 +14,17 @@ import ucar.nc2.Variable;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.*;
 import java.util.Objects;
 import java.util.regex.Pattern;
+
+import static org.climatearchive.climatearchive.AdminController.getModelSQL;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
 
-    Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
+    //Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
 
     @GetMapping("/getData")
     @ResponseBody
@@ -28,13 +32,21 @@ public class Controller {
             @RequestParam("model") String model,
             @RequestParam("lat") float lat,
             @RequestParam("lon") float lon
-    ) {
-        if (modelFormat.matcher(model).find()) {
+    ) throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:./model.data");
+        Statement stmt = conn.createStatement();
+        String sql = "SELECT * FROM model_data WHERE model_name = '" + model + "'";
+        ResultSet rs = stmt.executeQuery(sql);
+        if (rs.next()) {
+            Model r = new Model(
+                    rs.getString("model_name"),
+                    rs.getString("latitude_value"),
+                    rs.getString("longitude_value"));
             StringBuilder result = new StringBuilder("field,temp,rain");
             for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
                 try (NetcdfFile ncfile = NetcdfFiles.open("./data/" + model + "/climate/" + model.toLowerCase() + "a.pdcl" + field + ".nc")) {
-                    float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable("latitude")).read().copyTo1DJavaArray();
-                    float[] lons = (float[]) Objects.requireNonNull(ncfile.findVariable("longitude")).read().copyTo1DJavaArray();
+                    float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable(r.getLatitude_value())).read().copyTo1DJavaArray();
+                    float[] lons = (float[]) Objects.requireNonNull(ncfile.findVariable(r.getLongitude_value())).read().copyTo1DJavaArray();
                     if (lat > lats[0] || lat < lats[lats.length - 1]) { //todo change lat to mod so that all values are accepted
                         return new ResponseEntity<>("Please select a value for latitude between " + lats[lats.length - 1] + " & " + lats[0], HttpStatus.BAD_REQUEST);
                     }
