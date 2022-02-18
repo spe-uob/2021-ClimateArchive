@@ -2,8 +2,11 @@ package org.climatearchive.climatearchive;
 
 import org.climatearchive.climatearchive.modeldb.Model;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -12,19 +15,23 @@ import ucar.nc2.NetcdfFiles;
 import ucar.nc2.Variable;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.Objects;
-import java.util.regex.Pattern;
-
-import static org.climatearchive.climatearchive.AdminController.getModelSQL;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
 
     //Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
+    public final static String getModelSQL = "SELECT * FROM model_data WHERE model_name = ?";
+
+    private final JdbcTemplate modelDataBase;
+
+    @Autowired
+    public Controller(JdbcTemplate modelDataBase) {
+        this.modelDataBase = modelDataBase;
+    }
 
     @GetMapping("/getData")
     @ResponseBody
@@ -33,15 +40,8 @@ public class Controller {
             @RequestParam("lat") float lat,
             @RequestParam("lon") float lon
     ) throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:./model.data");
-        Statement stmt = conn.createStatement();
-        String sql = "SELECT * FROM model_data WHERE model_name = '" + model + "'";
-        ResultSet rs = stmt.executeQuery(sql);
-        if (rs.next()) {
-            Model r = new Model(
-                    rs.getString("model_name"),
-                    rs.getString("latitude_value"),
-                    rs.getString("longitude_value"));
+        Model r = getModelData(model);
+        if (r != null) {
             StringBuilder result = new StringBuilder("field,temp,rain");
             for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
                 try (NetcdfFile ncfile = NetcdfFiles.open("./data/" + model + "/climate/" + model.toLowerCase() + "a.pdcl" + field + ".nc")) {
@@ -74,6 +74,17 @@ public class Controller {
         }
     }
 
+    Model getModelData(String model) {
+        try {
+            return modelDataBase.queryForObject(getModelSQL, (rs, rowNum) -> new Model(
+                    rs.getString("model_name"),
+                    rs.getString("latitude_value"),
+                    rs.getString("longitude_value")
+            ), model);
+        } catch (DataAccessException e) {
+            return null;
+        }
+    }
 
     Point findClosestPoint(float lat, float lon, float[] lats, float[] lons) {
         int x = indexOfClosest(lat, lats);

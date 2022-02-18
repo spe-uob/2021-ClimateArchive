@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 @RestController
 public class AdminController {
 
-    public final static String getModelSQL = "SELECT * FROM model_data WHERE model_name = ?";
     private final static String addModelSQL = "INSERT OR IGNORE INTO model_data VALUES (?, ?, ?)";
 
     Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
@@ -104,18 +103,5 @@ public class AdminController {
         } else {
             return new ResponseEntity<>("Couldn't add any models to DB", HttpStatus.OK);
         }
-//        var m = models.get(0);
-//        try {
-//            Model r = modelDataBase.queryForObject(getModelSQL, (rs, rowNum) -> new Model(
-//                    rs.getString("model_name"),
-//                    rs.getString("latitude_value"),
-//                    rs.getString("longitude_value")
-//            ), m);
-//            return new ResponseEntity<>(r, HttpStatus.OK);
-//        } catch (EmptyResultDataAccessException e) {
-//            return new ResponseEntity<>("model: " + m + " does not exist", HttpStatus.BAD_REQUEST);
-//        } catch (DataAccessException e) {
-//            return new ResponseEntity<>("error fetching with database", HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
     }
 }
