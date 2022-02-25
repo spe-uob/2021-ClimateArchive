@@ -3,6 +3,7 @@ package org.climatearchive.climatearchive;
 import org.climatearchive.climatearchive.modeldb.Model;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,9 @@ public class Controller {
 
     private final JdbcTemplate modelDataBase;
 
+    @Value("${data_location}")
+    private String data_location;
+
     @Autowired
     public Controller(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
@@ -44,7 +48,7 @@ public class Controller {
         if (r != null) {
             StringBuilder result = new StringBuilder("field,temp,rain");
             for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
-                try (NetcdfFile ncfile = NetcdfFiles.open("./data/" + model + "/climate/" + model.toLowerCase() + "a.pdcl" + field + ".nc")) {
+                try (NetcdfFile ncfile = NetcdfFiles.open(data_location + model + "/climate/" + model.toLowerCase() + "a.pdcl" + field + ".nc")) {
                     float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable(r.getLatitude_value())).read().copyTo1DJavaArray();
                     float[] lons = (float[]) Objects.requireNonNull(ncfile.findVariable(r.getLongitude_value())).read().copyTo1DJavaArray();
                     if (lat > lats[0] || lat < lats[lats.length - 1]) { //todo change lat to mod so that all values are accepted
