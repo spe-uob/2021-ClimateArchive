@@ -48,15 +48,9 @@ public class Controller {
         if (r != null) {
             StringBuilder result = new StringBuilder("field,temp,rain");
             for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
-                try (NetcdfFile ncfile = NetcdfFiles.open(data_location + model + "/climate/" + model.toLowerCase() + "a.pdcl" + field + ".nc")) {
+                try (NetcdfFile ncfile = NetcdfFiles.open(data_location + '/' + model + "/climate/" + model.toLowerCase() + "a.pdcl" + field + ".nc")) {
                     float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable(r.getLatitude_value())).read().copyTo1DJavaArray();
                     float[] lons = (float[]) Objects.requireNonNull(ncfile.findVariable(r.getLongitude_value())).read().copyTo1DJavaArray();
-                    if (lat > lats[0] || lat < lats[lats.length - 1]) { //todo change lat to mod so that all values are accepted
-                        return new ResponseEntity<>("Please select a value for latitude between " + lats[lats.length - 1] + " & " + lats[0], HttpStatus.BAD_REQUEST);
-                    }
-                    if (lon < lons[0] || lon > lons[lons.length - 1]) { //todo change lon to mod so that all values are accepted
-                        return new ResponseEntity<>("Please select a value for longitude between " + lons[0] + " & " + lons[lons.length - 1], HttpStatus.BAD_REQUEST);
-                    }
                     Variable temp = ncfile.findVariable(("temp_mm_1_5m"));
                     Variable rain = ncfile.findVariable(("precip_mm_srf"));
                     if (temp == null || rain == null) {
