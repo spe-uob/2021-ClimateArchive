@@ -1,8 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "data_location",
-      "type": "java.lang.String",
-      "description": "Location model data is stored."
-  }
-] }
