@@ -5,6 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
+import java.util.Arrays;
+
 @SpringBootApplication
 public class ClimateArchiveApplication extends SpringBootServletInitializer {
 
@@ -14,6 +16,14 @@ public class ClimateArchiveApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
+        int adminIndex = Arrays.asList(args).indexOf("--add_models");
+        if (adminIndex != -1) {
+            args[adminIndex] = "--spring.main.web-application-type=none";
+            if (Arrays.stream(args).noneMatch(arg -> arg.startsWith("--models="))) {
+                System.out.println("No models listed to be added");
+                return;
+            }
+        }
         SpringApplication.run(ClimateArchiveApplication.class, args);
     }
 
