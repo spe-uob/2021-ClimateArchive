@@ -12,6 +12,7 @@ import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFiles;
 import ucar.nc2.Variable;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +38,16 @@ public class AdminController {
     @Autowired
     public AdminController(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
+    }
+
+    @PostConstruct
+    public void configureModels() {
         List<String> models = new ArrayList<>();
         if (new_models == null) {
             System.out.println("\n\nNo models to be added\n---------------------\n\n");
             return;
         }
-        System.out.println("Adding new models\n-----------------");
+        System.out.println("\nAdding new models\n-----------------");
         for (String m : new_models.split(",")) {
             if (modelFormat.matcher(m).matches()) {
                 models.add(m);
@@ -107,7 +112,10 @@ public class AdminController {
                 failedModels.add(m);
             }
         }
-        System.out.println("\nFailed to add models\n--------------------");
-        failedModels.forEach(s -> System.out.println(" - " + s));
+        if (!failedModels.isEmpty()) {
+            System.out.println("\nFailed to add models\n--------------------");
+            failedModels.forEach(s -> System.out.println(" - " + s));
+            System.out.println("\n");
+        }
     }
 }
