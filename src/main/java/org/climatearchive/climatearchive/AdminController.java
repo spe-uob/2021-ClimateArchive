@@ -36,6 +36,9 @@ public class AdminController {
     @Value("${models}")
     private String new_models;
 
+    @Value("${model_sep}")
+    private String model_sep;
+
     @Autowired
     public AdminController(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
@@ -50,7 +53,7 @@ public class AdminController {
             return;
         }
         System.out.println("\nAdding new models\n-----------------");
-        for (String m : new_models.split(",")) {
+        for (String m : new_models.split(model_sep)) {
             if (modelFormat.matcher(m).matches()) {
                 models.add(m);
             } else {
