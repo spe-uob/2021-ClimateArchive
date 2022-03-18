@@ -3,6 +3,7 @@ package org.climatearchive.climatearchive;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
+@ConditionalOnProperty(name = "add_models")
 public class AdminController {
 
     private final static String addModelSQL = "INSERT OR IGNORE INTO model_data VALUES (?, ?, ?)";
