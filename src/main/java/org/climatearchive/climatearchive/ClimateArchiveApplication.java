@@ -18,11 +18,15 @@ public class ClimateArchiveApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         int adminIndex = Arrays.asList(args).indexOf("--add_models");
         if (adminIndex != -1) {
-            args[adminIndex] = "--spring.main.web-application-type=none";
             if (Arrays.stream(args).noneMatch(arg -> arg.startsWith("--models="))) {
                 System.out.println("No models listed to be added");
                 return;
             }
+            args[adminIndex] = "--spring.main.web-application-type=none";
+            String[] newArgs = new String[args.length + 1];
+            System.arraycopy(args, 0, newArgs, 0, args.length);
+            newArgs[args.length] = "--logging.level.root=WARN"; // disable info logs
+            args = newArgs;
         }
         SpringApplication.run(ClimateArchiveApplication.class, args);
     }

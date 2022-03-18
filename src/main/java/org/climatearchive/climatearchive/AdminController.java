@@ -104,12 +104,12 @@ public class AdminController {
             if (info != null) {
                 int success = modelDataBase.update(addModelSQL, m, info[0], info[1]);
                 if (success == 0) {
-                    failedModels.add(m);
+                    failedModels.add(m + " - couldn't add to database (it might already exist)");
                 } else {
-                    System.out.println("Model: " + m + " added");
+                    System.out.println(" - " + m);
                 }
             } else {
-                failedModels.add(m);
+                failedModels.add(m + " - issue reading file");
             }
         }
         if (!failedModels.isEmpty()) {
