@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 public class AdminController {
 
     private final static String addModelSQL = "INSERT OR IGNORE INTO model_data VALUES (?, ?, ?)";
+    private final static String createTable = "CREATE TABLE IF NOT EXISTS model_data( model_name String not null constraint model_data_pk primary key, latitude_value String not null, longitude_value String not null)";
 
     Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
     private final static String[] possibleLatValues = new String[]{"lat","latitude"};
@@ -38,6 +39,7 @@ public class AdminController {
     @Autowired
     public AdminController(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
+        modelDataBase.execute(createTable);
     }
 
     @PostConstruct
