@@ -28,3 +28,86 @@ Stakeholders:
         -share datasets/graphs generated at specific points with other individuals
     
 Note: we are mainly working on our client's private repository to add features to climatearchive.org and on a backend server to provide access to underlying climate data.
+
+
+Usage
+=====
+
+The server can be downloaded from the releases tab or built from source.
+
+Building from source
+--------------------
+
+Download the source code using
+
+```
+git clone https://github.com/spe-uob/2021-ClimateArchive.git
+```
+
+Compile into a jar file using
+
+```
+cd 2021-ClimateArchive
+
+mvn package -DskipTests
+```
+
+This will save ```climateArchive.jar``` in the ```target``` directory
+
+Running
+-------
+
+First place ```climateArchive.jar``` into your chosen directory.
+
+Create a config folder using in the same directory with ```mkdir config```
+
+Create the file ```application.properties``` in the ```config``` file
+
+In this file enter the config
+
+```
+data_location=<path to climate data>
+```
+
+The server can now be started by running ```java -jar climateArchive.jar```
+
+
+Running as a service
+--------------------
+
+To have the program running in the background on a linux machine you can use a service. These instructions
+are only tested on ```ubuntu``` but should work on other distributions, maybe with some small modifications
+
+Create the file ```/lib/systemd/system/climate_archive.service``` and  paste the following
+
+```
+[Unit]
+Description=climate archive data api
+
+[Service]
+WorkingDirectory=<path to climateArchive.jar>
+ExecStart=java -jar climateArchive.jar
+User=<user>
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Now the service can be started by running
+```
+systemctl daemon-reload
+systemctl start climate_archive.service
+```
+
+
+
+Adding models to the server
+---------------------------
+The server can only access models which have been added to the database. They can be added through the commandline
+using the command
+
+```
+java -jar climateArchive.jar --add_models --models=<models to add seperated by ",">
+```
+
+The separator used can be changed by setting the ```model_sep``` property in ```application.properties```
