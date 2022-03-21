@@ -3,6 +3,7 @@ package org.climatearchive.climatearchive;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +20,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Component
+@ConditionalOnProperty(name = "add_models")
 public class AdminController {
 
     private final static String addModelSQL = "INSERT OR IGNORE INTO model_data VALUES (?, ?, ?)";
+    private final static String createTable = "CREATE TABLE IF NOT EXISTS model_data( model_name String not null constraint model_data_pk primary key, latitude_value String not null, longitude_value String not null)";
 
     Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
     private final static String[] possibleLatValues = new String[]{"lat","latitude"};
@@ -35,9 +38,13 @@ public class AdminController {
     @Value("${models}")
     private String new_models;
 
+    @Value("${model_sep}")
+    private String model_sep;
+
     @Autowired
     public AdminController(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
+        modelDataBase.execute(createTable);
     }
 
     @PostConstruct
@@ -48,7 +55,7 @@ public class AdminController {
             return;
         }
         System.out.println("\nAdding new models\n-----------------");
-        for (String m : new_models.split(",")) {
+        for (String m : new_models.split(model_sep)) {
             if (modelFormat.matcher(m).matches()) {
                 models.add(m);
             } else {
