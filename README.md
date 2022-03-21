@@ -87,7 +87,7 @@ Description=climate archive data api
 [Service]
 WorkingDirectory=<path to climateArchive.jar>
 ExecStart=java -jar climateArchive.jar
-User=<user>
+User=<user> 
 
 [Install]
 WantedBy=multi-user.target
