@@ -117,3 +117,9 @@ The following properties can be specified in the config file.
 | model_separator        | The separator used for splitting the list of models                                                                                                                                                                                                             | ,             |
 | allowed_cors           | A list of origins which can call the api. They must be seperated by the allowed_cors_separator and formatted according to the [spring documentation](https://spring.getdocs.org/en-US/spring-framework-docs/docs/spring-web-reactive/webflux/webflux-cors.html) | \*            |
 | allowed_cors_separator | The separator used for splitting the list of origins in allowed_cors                                                                                                                                                                                            | ,             |
+| server.port            | The port that will be used by the api                                                                                                                                                                                                                           | 8080          |
+
+
+## HTTPS
+
+To enable HTTPS on the server a security certificate must be created.
