@@ -21,10 +21,8 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class Controller {
 
-    //Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
     public final static String getModelSQL = "SELECT * FROM model_data WHERE model_name = ?";
 
     private final JdbcTemplate modelDataBase;
