@@ -8,17 +8,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class Security extends WebSecurityConfigurerAdapter {
 
-    @Value("${use_HTTPS}")
-    String useHTTPS;
-
     @Override
     protected void configure(HttpSecurity security) throws Exception
     {
         security.formLogin().disable();
-        System.out.println(useHTTPS);
-        if ("true".equals(useHTTPS)) {
-            security.requiresChannel().anyRequest().requiresSecure();
-            System.out.println("hi");
-        }
+        security.headers().httpStrictTransportSecurity().disable();
     }
 }
