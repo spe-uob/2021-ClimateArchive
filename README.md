@@ -119,7 +119,20 @@ The following properties can be specified in the config file.
 | allowed_cors_separator | The separator used for splitting the list of origins in allowed_cors                                                                                                                                                                                            | ,             |
 | server.port            | The port that will be used by the api                                                                                                                                                                                                                           | 8080          |
 
-
 ## HTTPS
 
 To enable HTTPS on the server a security certificate must be created.
+This must be saved in a keystore in the same directory as the `.jar` file.
+
+Then in the `application.properties` file set the following properties:
+
+| Property                      | Description                                         |
+| ----------------------------- | --------------------------------------------------- |
+| server.ssl.key-store-type     | The format of the keystore                          |
+| server.ssl.key-store          | The path to the keystore containing the certificate |
+| server.ssl.key-store-password | The password for the keystore                       |
+| server.ssl.key-alias          | The alias mapped to the certificate                 |
+| server.ssl.key-password       | The password used to generate the certificate       |
+| server.ssl.enabled            | Whether to enable https. Set this to `true`         |
+
+This will now block all requests using HTTP and require HTTPS
