@@ -31,11 +31,9 @@ public class ClimateArchiveTestNoModels {
         }
     }
 
-    @Order(0)
     @Test
     void contextLoads() {}
 
-    @Order(1)
     @Test
     void testBasicDataGetting() throws Exception {
         mockMvc.perform(get("/getData?model=tEyea&lat=50&lon=50"))
@@ -44,7 +42,6 @@ public class ClimateArchiveTestNoModels {
                 .andExpect(content().string(containsString("Model " + '"' + "tEyea" + '"' + " not found")));
     }
 
-    @Order(2)
     @Test
     void testParameterNotProvided() throws Exception {
         mockMvc.perform(get("/getData"))
@@ -61,7 +58,6 @@ public class ClimateArchiveTestNoModels {
                 .andExpect(content().string(containsString("Parameter " + '"' + "lon" + '"' + " not provided.")));
     }
 
-    @Order(3)
     @Test
     void testModelNotFound() throws Exception {
         mockMvc.perform(get("/getData?model=modelNameThatDoesntExist&lat=50&lon=50"))
