@@ -1,28 +1,52 @@
 package org.climatearchive.climatearchive;
 
+import org.assertj.core.util.Arrays;
+import org.climatearchive.climatearchive.modeldb.Model;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@SpringBootTest
+@SpringBootTest(args={"--add_models", "--models=tEyea,tEyeb,tEyec,tEyed,tEyee,teYEf,teYEg,teYEh,teYEi,teYEj,teYEk,teYEl,teYEm,teYEn,teYEo,teYEp,teYEq,teYEr,teYEs,teYEt,teYEu,teYEv,teYEw,teYEx,teYEy,teYEz"})
 @AutoConfigureMockMvc
-class ClimateArchiveApplicationTests {
+public class ClimateArchiveTestWithModels {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private JdbcTemplate modelDataBase;
+
+    @BeforeAll
+    static void removeOldModels() { // clears the database before adding new models
+        if (new File("model.data").delete()) {
+            System.out.println("Removed old file");
+        }
+    }
+
     @Test
     void contextLoads() {}
+
+    @Test
+    void modelsAddedSuccessfully() {
+        List<Object> res = modelDataBase.query("SELECT model_name FROM model_data;", (rs, rowNumber) -> rs.getString("model_name"));
+        assert res.equals(List.of("tEyea", "tEyeb", "tEyec", "tEyed", "tEyee", "teYEf", "teYEg", "teYEh", "teYEi", "teYEj", "teYEk", "teYEl", "teYEm", "teYEn", "teYEo", "teYEp", "teYEq", "teYEr", "teYEs", "teYEt", "teYEu", "teYEv", "teYEw", "teYEx", "teYEy", "teYEz"));
+    }
 
     @Test
     void testBasicDataGetting() throws Exception {
@@ -55,4 +79,7 @@ class ClimateArchiveApplicationTests {
                 .andExpect(status().is(400))
                 .andExpect(content().string(containsString("Model " + '"'  + "modelNameThatDoesntExist" + '"' + " not found.")));
     }
+
+
 }
+
