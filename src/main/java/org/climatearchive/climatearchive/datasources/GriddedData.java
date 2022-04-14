@@ -58,7 +58,6 @@ public class GriddedData implements DataSource{
                 result.add(errorList);
             }
         }
-        System.out.println(Arrays.toString(result.get(0)));
         return new Pair<>("", result);
     }
 
