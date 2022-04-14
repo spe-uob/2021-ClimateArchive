@@ -34,6 +34,8 @@ public class GriddedData implements DataSource{
     @Override
     public Pair<String, List<Float[]>> getClosest2DPointData(List<String> fields, List<String> variables, float lat, float lon, String data_location) {
         List<Float[]> result = new ArrayList<>();
+        Float[] errorList = new Float[variables.size()];
+        Arrays.fill(errorList, null);
         for (String field : fields) {
             try (NetcdfFile ncfile = NetcdfFiles.open(data_location + '/' + getModelName() + "/climate/" + getModelName().toLowerCase() + "a.pdcl" + field + ".nc")) {
                 float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable(this.model.getLatitude_value())).read().copyTo1DJavaArray();
@@ -53,7 +55,7 @@ public class GriddedData implements DataSource{
                 result.add(fieldValues);
 
             } catch (Exception e) {
-                result.add(null);
+                result.add(errorList);
             }
         }
         System.out.println(Arrays.toString(result.get(0)));

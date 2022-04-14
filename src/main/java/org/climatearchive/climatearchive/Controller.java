@@ -72,7 +72,7 @@ public class Controller {
             StringBuilder result = new StringBuilder("field,").append(String.join(",", variables)).append("\n"); // header of csv
             for (int i = 0; i < fields.size(); i++) {
                 result.append(fields.get(i)).append(",");
-                result.append(Arrays.stream(data.getSecond().get(i)).map(Object::toString).collect(Collectors.joining(",")));
+                result.append(Arrays.stream(data.getSecond().get(i)).map(String::valueOf).collect(Collectors.joining(",")));
                 result.append("\n");
             }
             return new ResponseEntity<>(result.toString(), HttpStatus.OK);
