@@ -1,7 +1,9 @@
 package org.climatearchive.climatearchive;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
@@ -22,11 +24,6 @@ public class ClimateArchiveApplication extends SpringBootServletInitializer {
                 System.out.println("No models listed to be added\nUse --models=<models to add seperated by \",\">");
                 return;
             }
-            String[] newArgs = new String[args.length + 2];
-            System.arraycopy(args, 0, newArgs, 0, args.length);
-            newArgs[args.length] = "--logging.level.root=WARN"; // disable info logs
-            newArgs[args.length + 1] = "--spring.main.web-application-type=none";
-            args = newArgs;
         }
         SpringApplication.run(ClimateArchiveApplication.class, args);
     }

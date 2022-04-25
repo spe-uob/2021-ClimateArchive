@@ -71,9 +71,7 @@ public class AdminController {
             }
         }
         addModels(models);
-        System.out.println("Closing spring boot");
-        SpringApplication.exit(this.context);
-        System.exit(0);
+        System.out.println("Starting server. This will fail if the server is already running");
     }
 
     private String[] extractModelInformation(NetcdfFile ncfile) {
