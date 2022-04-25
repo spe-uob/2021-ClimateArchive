@@ -2,7 +2,6 @@ package org.climatearchive.climatearchive.datasources;
 
 import org.climatearchive.climatearchive.modeldb.Model;
 import org.climatearchive.climatearchive.util.Pair;
-import org.jetbrains.annotations.NotNull;
 import ucar.nc2.NetcdfFile;
 import ucar.nc2.NetcdfFiles;
 import ucar.nc2.Variable;
@@ -61,23 +60,42 @@ public class GriddedData implements DataSource{
         return new Pair<>("", result);
     }
 
+    // calculates index of the closest point
     private Pair<Integer, Integer> findClosestPoint(float lat, float lon, float[] lats, float[] lons) {
-        int x = indexOfClosest(lat, lats);
-        int y = indexOfClosest(lon, lons);
-        return new Pair<>(x, y);
-    }
-
-    private int indexOfClosest(float target, float @NotNull [] arr) {
-        float smallestDiff = Float.MAX_VALUE;
-        int bestIndex = 0;
-        for (int i = 0; i < arr.length; i++) {
-            float diff = Math.abs(arr[i] - target);
-            if (diff < smallestDiff) {
-                smallestDiff = diff;
-                bestIndex = i;
+        List<Integer> xs = indexOfClosest2(lat, lats);
+        List<Integer> ys = indexOfClosest2(lon, lons);
+        double smallestDistance = Double.MAX_VALUE;
+        Pair<Integer, Integer> closestPoint = new Pair<>(-1, -1);
+        for (Integer x : xs) {
+            for (Integer y : ys) {
+                double d = distance(lat, lon, lats[x], lons[y]);
+                if (smallestDistance > d) {
+                    smallestDistance = d;
+                    closestPoint = new Pair<>(x, y);
+                }
             }
         }
-        return bestIndex;
+        return closestPoint;
+    }
+
+    public List<Integer> indexOfClosest2(float key, float[] sortedArray) {
+        int closestIndex = 0;
+        float closestDif = Float.MAX_VALUE;
+        boolean tooBig = false;
+        for (int i = 0; i < sortedArray.length; i++) {
+            if (key == sortedArray[i]) return List.of(i);
+            float d = sortedArray[i] - key;
+            if (Math.abs(d) < closestDif) {
+                closestIndex = i;
+                closestDif = Math.abs(d);
+                tooBig = (d > 0);
+            }
+        }
+        if (tooBig) { // return index i and i - 1
+            return List.of(closestIndex, (closestIndex + 1) % sortedArray.length);
+        } else { // return index i and i + 1
+            return List.of(closestIndex, (closestIndex - 1 + sortedArray.length) % sortedArray.length);
+        }
     }
 
     private Float extractVariableData(Variable variable, int xIndex, int yIndex) {
@@ -87,5 +105,12 @@ public class GriddedData implements DataSource{
         } catch (Exception e) {
             return null;
         }
+    }
+
+    // calculates the closest distance using haversine
+    private double distance(float lat1, float  lon1, float  lat2, float  lon2) {
+        double p = 0.017453292519943295; // pi / 180
+        double a = 0.5 - Math.cos((lat2 - lat1) * p)/2 + Math.cos(lat1 * p) * Math.cos(lat2 * p) * (1 - Math.cos((lon2 - lon1) * p))/2;
+        return Math.asin(Math.sqrt(a)); // not scaled as the smallest distance is the same
     }
 }
