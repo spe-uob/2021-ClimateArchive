@@ -23,8 +23,8 @@ import java.util.regex.Pattern;
 @ConditionalOnProperty(name = "add_models")
 public class AdminController {
 
-    private final static String addModelSQL = "INSERT OR IGNORE INTO model_data VALUES (?, ?, ?)";
-    private final static String createTable = "CREATE TABLE IF NOT EXISTS model_data( model_name String not null constraint model_data_pk primary key, latitude_value String not null, longitude_value String not null)";
+    private final static String addModelSQL = "INSERT OR IGNORE INTO model_data VALUES (?, ?, ?, ?)";
+    private final static String createTable = "CREATE TABLE IF NOT EXISTS model_data( model_name String not null constraint model_data_pk primary key, latitude_value String not null, longitude_value String not null, model_path_template String not null)";
 
     Pattern modelFormat = Pattern.compile("^[a-z,A-Z]{5}$");
     private final static String[] possibleLatValues = new String[]{"lat","latitude"};
@@ -40,6 +40,12 @@ public class AdminController {
 
     @Value("${model_sep}")
     private String model_sep;
+
+    @Value("${model_templates}")
+    private String model_templates;
+
+    @Value(("${model_templates_sep}"))
+    private String model_templates_sep;
 
     @Autowired
     public AdminController(JdbcTemplate modelDataBase) {
@@ -63,6 +69,7 @@ public class AdminController {
             }
         }
         addModels(models);
+        System.out.println("Starting server. This will fail if the server is already running");
     }
 
     private String[] extractModelInformation(NetcdfFile ncfile) {
@@ -109,7 +116,7 @@ public class AdminController {
         for (String m: models) {
             String[] info = getModelInformation(m);
             if (info != null) {
-                int success = modelDataBase.update(addModelSQL, m, info[0], info[1]);
+                int success = modelDataBase.update(addModelSQL, m, info[0], info[1], ""); // todo replace "" with model path template
                 if (success == 0) {
                     failedModels.add(m + " - couldn't add to database (it might already exist)");
                 } else {
