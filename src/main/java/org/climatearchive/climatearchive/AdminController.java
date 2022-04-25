@@ -3,7 +3,12 @@ package org.climatearchive.climatearchive;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,9 +46,12 @@ public class AdminController {
     @Value("${model_sep}")
     private String model_sep;
 
+    private ApplicationContext context;
+
     @Autowired
-    public AdminController(JdbcTemplate modelDataBase) {
+    public AdminController(JdbcTemplate modelDataBase, ApplicationContext context) {
         this.modelDataBase = modelDataBase;
+        this.context = context;
         modelDataBase.execute(createTable);
     }
 
@@ -63,6 +71,7 @@ public class AdminController {
             }
         }
         addModels(models);
+        System.out.println("Starting server. This will fail if the server is already running");
     }
 
     private String[] extractModelInformation(NetcdfFile ncfile) {
