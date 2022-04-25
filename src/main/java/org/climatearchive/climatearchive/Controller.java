@@ -75,7 +75,8 @@ public class Controller {
             return modelDataBase.queryForObject(getModelSQL, (rs, rowNum) -> new Model(
                     rs.getString("model_name"),
                     rs.getString("latitude_value"),
-                    rs.getString("longitude_value")
+                    rs.getString("longitude_value"),
+                    rs.getString("model_path_template")
             ), model);
         } catch (DataAccessException e) {
             return null;
