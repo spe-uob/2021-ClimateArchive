@@ -26,23 +26,30 @@ public class Model {
     }
 
     public String getModel_path(String field) {
-        String model_path = this.model_path_template;
+        return getModel_path(model_path_template, model_name, field);
+    }
+
+    public static String getModel_path(String model_template, String model_name, String field) {
         // inject model name
-        if (model_path.contains("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>")) {
-            model_path = model_path.replace("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>", model_name);
-        } else if (model_path.contains("<climate_archive_model_template>")) {
-            model_path = model_path.replace("<climate_archive_model_template>", model_name.toLowerCase());
-        } else if (model_path.contains("<Climate_Archive_Model_Template>")) {
-            model_path = model_path.replace("<Climate_Archive_Model_Template>", model_name);
+        if (model_template.contains("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>")) {
+            model_template = model_template.replace("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>", model_name);
+        }
+        if (model_template.contains("<climate_archive_model_template>")) {
+            model_template = model_template.replace("<climate_archive_model_template>", model_name.toLowerCase());
+        }
+        if (model_template.contains("<Climate_Archive_Model_Template>")) {
+            model_template = model_template.replace("<Climate_Archive_Model_Template>", model_name);
         }
         // inject field
-        if (model_path.contains("<CLIMATE_ARCHIVE_FIELD_TEMPLATE>")) {
-            model_path = model_path.replace("<CLIMATE_ARCHIVE_FIELD_TEMPLATE>", field.toUpperCase());
-        } else if (model_path.contains("<climate_archive_field_template>")) {
-            model_path = model_path.replace("<climate_archive_field_template>", field.toLowerCase());
-        } else if (model_path.contains("<Climate_Archive_Field_Template>")) {
-            model_path = model_path.replace("<Climate_Archive_Field_Template>", field);
+        if (model_template.contains("<CLIMATE_ARCHIVE_FIELD_TEMPLATE>")) {
+            model_template = model_template.replace("<CLIMATE_ARCHIVE_FIELD_TEMPLATE>", field.toUpperCase());
         }
-        return model_path;
+        if (model_template.contains("<climate_archive_field_template>")) {
+            model_template = model_template.replace("<climate_archive_field_template>", field.toLowerCase());
+        }
+        if (model_template.contains("<Climate_Archive_Field_Template>")) {
+            model_template = model_template.replace("<Climate_Archive_Field_Template>", field);
+        }
+        return model_template;
     }
 }
