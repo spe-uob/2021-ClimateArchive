@@ -3,7 +3,6 @@ package org.climatearchive.climatearchive;
 import org.climatearchive.climatearchive.datasources.DataSource;
 import org.climatearchive.climatearchive.datasources.GriddedData;
 import org.climatearchive.climatearchive.modeldb.Model;
-import org.climatearchive.climatearchive.util.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,11 +45,11 @@ public class Controller {
             List<String> fields = List.of("ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec");
             List<String> variables = List.of("temp_mm_1_5m", "precip_mm_srf");
             DataSource dataSource = new GriddedData(r);
-            Pair<String, List<Float[]>> data = dataSource.getClosest2DPointData(fields, variables, lat, lon, data_location);
+            List<Float[]> data = dataSource.getClosest2DPointData(fields, variables, lat, lon, data_location);
             StringBuilder result = new StringBuilder("field,").append(String.join(",", variables)).append("\n"); // header of csv
             for (int i = 0; i < fields.size(); i++) {
                 result.append(fields.get(i)).append(",");
-                result.append(Arrays.stream(data.getSecond().get(i)).map(String::valueOf).collect(Collectors.joining(",")));
+                result.append(Arrays.stream(data.get(i)).map(String::valueOf).collect(Collectors.joining(",")));
                 result.append("\n");
             }
             return new ResponseEntity<>(result.toString(), HttpStatus.OK);

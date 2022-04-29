@@ -10,5 +10,5 @@ public interface DataSource {
 
     // take lists of fields, variables and x y point and location of the data
     // returns string of data fetched info, list of results
-    Pair<String, List<Float[]>> getClosest2DPointData(List<String> fields, List<String> variables, float lat, float lon, String data_location);
+    List<Float[]> getClosest2DPointData(List<String> fields, List<String> variables, float lat, float lon, String data_location);
 }
