@@ -29,6 +29,8 @@
 
 Note: we are mainly working on our client's private repository to add features to climatearchive.org and on a backend server to provide access to underlying climate data.
 
+---
+
 # Usage
 
 The server can be downloaded from the releases tab or built from source.
@@ -107,17 +109,91 @@ java -jar climateArchive.jar --add_models --models=<models to add seperated by "
 
 The separator used can be changed by setting the `model_sep` property in `application.properties`
 
+Model template formats are taken from the `model_templates` property in `application.properties` with the template
+fulfilling the most fields being picked.
+
+Templates should be in the following format
+
+```
+<Climate_Archive_Model_Template>/climate/<Climate_Archive_Field_Template>.nc
+```
+
+`<Climate_Archive_Model_Template>` will be replaced with the name of the model and
+`<Climate_Archive_Field_Template>` will be replaced with the field being requested
+
+The filled in template will be added to the data_location path when fetching data
+
+Additionally:
+
+- `<Climate_Archive_Model_Template>` is the model name with case as given from the command line
+- `<CLIMATE_ARCHIVE_MODEL_TEMPLATE>` is the model in upper case
+- `<climate_archive_model_template>` is the model in lower case
+- `<Climate_Archive_Field_Template>` is the field with case as given
+- `<CLIMATE_ARCHIVE_FIELD_TEMPLATE>` is the field in upper case
+- `<climate_archive_field_template>` is the field in lower case
+
+The separator used can be changed by setting the `model_templates_sep` property in `application.properties`
+
+<br>
+<details>
+<summary>Examples of templates</summary>
+<br>
+
+For example given that the model is `Model` and the field is `Example` using the following template
+
+```
+<Climate_Archive_Model_Template>/climate/<climate_archive_model_template>.pdcl<Climate_Archive_Field_Template>.nc
+```
+
+The filled in template will be
+
+```
+Model/climate/model.pdclExample.nc
+```
+
+<br>
+
+For a more extreme example given that the model is `Model` and the field is `Example` using the following template
+
+```
+<Climate_Archive_Model_Template>/<CLIMATE_ARCHIVE_MODEL_TEMPLATE>/<climate_archive_model_template>/<Climate_Archive_Field_Template>/<CLIMATE_ARCHIVE_FIELD_TEMPLATE>/<climate_archive_field_template>.nc
+```
+
+The filled in template will be
+
+```
+Model/MODEL/model/Example/EXAMPLE/example.nc
+```
+
+This will then be added to the data location path when reading the file
+
+<br>
+<details id="default_template">
+<summary>Default templates</summary>
+<br>
+
+These were provided by our client as it was the structure their models were in
+
+```
+<Climate_Archive_Model_Template>/climate/<climate_archive_model_template>a.pdcl<Climate_Archive_Field_Template>.nc,<Climate_Archive_Model_Template>/climate/<Climate_Archive_Model_Template>a.pdcl<Climate_Archive_Field_Template>.nc
+```
+
+</details>
+</details>
+
 # Config
 
 The following properties can be specified in the config file.
 
-| Property               | Description                                                                                                                                                                                                                                                     | Default Value |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------- |
-| data_location          | The path to the folder containing all models                                                                                                                                                                                                                    | ./data        |
-| model_separator        | The separator used for splitting the list of models                                                                                                                                                                                                             | ,             |
-| allowed_cors           | A list of origins which can call the api. They must be seperated by the allowed_cors_separator and formatted according to the [spring documentation](https://spring.getdocs.org/en-US/spring-framework-docs/docs/spring-web-reactive/webflux/webflux-cors.html) | \*            |
-| allowed_cors_separator | The separator used for splitting the list of origins in allowed_cors                                                                                                                                                                                            | ,             |
-| server.port            | The port that will be used by the api                                                                                                                                                                                                                           | 8080          |
+| Property               | Description                                                                                                                                                                                                                                                     | Default Value                               |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| data_location          | The path to the folder containing all models                                                                                                                                                                                                                    | ./data                                      |
+| model_separator        | The separator used for splitting the list of models                                                                                                                                                                                                             | ,                                           |
+| allowed_cors           | A list of origins which can call the api. They must be seperated by the allowed_cors_separator and formatted according to the [spring documentation](https://spring.getdocs.org/en-US/spring-framework-docs/docs/spring-web-reactive/webflux/webflux-cors.html) | \*                                          |
+| allowed_cors_separator | The separator used for splitting the list of origins in allowed_cors                                                                                                                                                                                            | ,                                           |
+| server.port            | The port that will be used by the api                                                                                                                                                                                                                           | 8080                                        |
+| model_templates        | The list of model templates which should be used when adding new models                                                                                                                                                                                         | [provided by our client](#default_template) |
+| model_templates_sep    | The separator used for splitting the list of model templates                                                                                                                                                                                                    | ,                                           |
 
 ## HTTPS
 
