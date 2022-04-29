@@ -32,7 +32,7 @@ public class Model {
     public static String getModel_path(String model_template, String model_name, String field) {
         // inject model name
         if (model_template.contains("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>")) {
-            model_template = model_template.replace("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>", model_name);
+            model_template = model_template.replace("<CLIMATE_ARCHIVE_MODEL_TEMPLATE>", model_name.toUpperCase());
         }
         if (model_template.contains("<climate_archive_model_template>")) {
             model_template = model_template.replace("<climate_archive_model_template>", model_name.toLowerCase());
