@@ -36,7 +36,7 @@ public class GriddedData implements DataSource{
         Float[] errorList = new Float[variables.size()];
         Arrays.fill(errorList, null);
         for (String field : fields) {
-            try (NetcdfFile ncfile = NetcdfFiles.open(data_location + "/" + this.model.getModel_path(field))) {
+            try (NetcdfFile ncfile = NetcdfFiles.open(data_location + '/' + getModelName() + "/climate/" + getModelName().toLowerCase() + "a.pdcl" + field + ".nc")) {
                 float[] lats = (float[]) Objects.requireNonNull(ncfile.findVariable(this.model.getLatitude_value())).read().copyTo1DJavaArray();
                 float[] lons = (float[]) Objects.requireNonNull(ncfile.findVariable(this.model.getLongitude_value())).read().copyTo1DJavaArray();
 
