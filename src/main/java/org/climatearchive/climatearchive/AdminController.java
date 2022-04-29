@@ -87,7 +87,7 @@ public class AdminController {
                     System.out.println(" - " + m);
                 }
             } else {
-                failedModels.add(m + " - issue reading file");
+                failedModels.add(m + " - issue reading model. There may not be a matching template");
             }
         }
         if (!failedModels.isEmpty()) {
