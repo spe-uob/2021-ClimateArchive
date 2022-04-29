@@ -167,18 +167,6 @@ Model/MODEL/model/Example/EXAMPLE/example.nc
 
 This will then be added to the data location path when reading the file
 
-<br>
-<details id="default_template">
-<summary>Default templates</summary>
-<br>
-
-These were provided by our client as it was the structure their models were in
-
-```
-<Climate_Archive_Model_Template>/climate/<climate_archive_model_template>a.pdcl<Climate_Archive_Field_Template>.nc,<Climate_Archive_Model_Template>/climate/<Climate_Archive_Model_Template>a.pdcl<Climate_Archive_Field_Template>.nc
-```
-
-</details>
 </details>
 
 # Config
@@ -192,7 +180,7 @@ The following properties can be specified in the config file.
 | allowed_cors           | A list of origins which can call the api. They must be seperated by the allowed_cors_separator and formatted according to the [spring documentation](https://spring.getdocs.org/en-US/spring-framework-docs/docs/spring-web-reactive/webflux/webflux-cors.html) | \*                                          |
 | allowed_cors_separator | The separator used for splitting the list of origins in allowed_cors                                                                                                                                                                                            | ,                                           |
 | server.port            | The port that will be used by the api                                                                                                                                                                                                                           | 8080                                        |
-| model_templates        | The list of model templates which should be used when adding new models                                                                                                                                                                                         | [provided by our client](#default_template) |
+| model_templates        | The list of model templates which should be used when adding new models                                                                                                                                                                                         | <Climate_Archive_Model_Template>/<Climate_Archive_Field_Template>.nc |
 | model_templates_sep    | The separator used for splitting the list of model templates                                                                                                                                                                                                    | ,                                           |
 
 ## HTTPS
