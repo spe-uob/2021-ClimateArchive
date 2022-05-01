@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(args={"--add_models", "--models=tEyea,tEyeb,tEyec,tEyed,tEyee,teYEf,teYEg,teYEh,teYEi,teYEj,teYEk,teYEl,teYEm,teYEn,teYEo,teYEp,teYEq,teYEr,teYEs,teYEt,teYEu,teYEv,teYEw,teYEx,teYEy,teYEz"})
+@SpringBootTest(args={"--add_models", "--models=tEyea,tEyeb,tEyec,tEyed,tEyee,teYEf,teYEg,teYEh,teYEi,teYEj,teYEk,teYEl,teYEm,teYEn,teYEo,teYEp,teYEq,teYEr,teYEs,teYEt,teYEu,teYEv,teYEw,teYEx,teYEy,teYEz", "--model_templates=<Climate_Archive_Model_Template>/climate/<climate_archive_model_template>a.pdcl<Climate_Archive_Field_Template>.nc,<Climate_Archive_Model_Template>/climate/<Climate_Archive_Model_Templat>"})
 @AutoConfigureMockMvc
 public class ClimateArchiveTestWithModels {
 
