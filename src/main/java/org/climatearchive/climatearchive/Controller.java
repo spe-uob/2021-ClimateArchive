@@ -28,6 +28,22 @@ public class Controller {
     @Value("${data_location}")
     private String data_location;
 
+    @Value("${fields}")
+    private String fields;
+
+    @Value("${fields_sep}")
+    private String fields_sep;
+
+    private List<String> fieldsList = null;
+
+    @Value("${variables}")
+    private String variables;
+
+    @Value("${variables_sep}")
+    private String variables_sep;
+
+    private List<String> variablesList = null;
+
     @Autowired
     public Controller(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
@@ -42,8 +58,8 @@ public class Controller {
     ) {
         Model r = getModelData(model);
         if (r != null) {
-            List<String> fields = List.of("ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec");
-            List<String> variables = List.of("temp_mm_1_5m", "precip_mm_srf");
+            List<String> fields = getFieldsList();
+            List<String> variables = getVariablesList();
             DataSource dataSource = new GriddedData(r);
             List<Float[]> data = dataSource.getClosest2DPointData(fields, variables, lat, lon, data_location);
             StringBuilder result = new StringBuilder("field,").append(String.join(",", variables)).append("\n"); // header of csv
@@ -69,6 +85,22 @@ public class Controller {
         } catch (DataAccessException e) {
             return null;
         }
+    }
+
+    List<String> getFieldsList() {
+        if (fieldsList == null) {
+            fieldsList = List.of(fields.split(fields_sep));
+            return fieldsList;
+        }
+        return fieldsList;
+    }
+
+    List<String> getVariablesList() {
+        if (variablesList == null) {
+            variablesList = List.of(variables.split(variables_sep));
+            return variablesList;
+        }
+        return variablesList;
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)

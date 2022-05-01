@@ -50,6 +50,14 @@ public class AdminController {
 
     private String[] model_templates_list = null;
 
+    @Value("${fields}")
+    private String fields;
+
+    @Value("${fields_sep}")
+    private String fields_sep;
+
+    private List<String> fieldsList = null;
+
     @Autowired
     public AdminController(JdbcTemplate modelDataBase) {
         this.modelDataBase = modelDataBase;
@@ -130,7 +138,7 @@ public class AdminController {
         for (String model_template : getModel_templates_list()) {
             int templateTotal = 0;
             String[] information = null;
-            for (String field : new String[]{"ann", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"}) {
+            for (String field : getFieldsList()) {
                 String filePath = data_location + "/" + Model.getModel_path(model_template, model, field);
                 try (NetcdfFile ncfile = NetcdfFiles.open(filePath)) {
                     String[] info = extractModelInformation(ncfile);
@@ -157,5 +165,13 @@ public class AdminController {
             model_templates_list = model_templates.split(model_templates_sep);
         }
         return  model_templates_list;
+    }
+
+    List<String> getFieldsList() {
+        if (fieldsList == null) {
+            fieldsList = List.of(fields.split(fields_sep));
+            return fieldsList;
+        }
+        return fieldsList;
     }
 }
