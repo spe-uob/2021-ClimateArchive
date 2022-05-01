@@ -31,16 +31,16 @@ public class Controller {
     @Value("${fields}")
     private String fields;
 
-    @Value("${fields_sep}")
-    private String fields_sep;
+    @Value("${fields_separator}")
+    private String fields_separator;
 
     private List<String> fieldsList = null;
 
     @Value("${variables}")
     private String variables;
 
-    @Value("${variables_sep}")
-    private String variables_sep;
+    @Value("${variables_separator}")
+    private String variables_separator;
 
     private List<String> variablesList = null;
 
@@ -89,7 +89,7 @@ public class Controller {
 
     List<String> getFieldsList() {
         if (fieldsList == null) {
-            fieldsList = List.of(fields.split(fields_sep));
+            fieldsList = List.of(fields.split(fields_separator));
             return fieldsList;
         }
         return fieldsList;
@@ -97,7 +97,7 @@ public class Controller {
 
     List<String> getVariablesList() {
         if (variablesList == null) {
-            variablesList = List.of(variables.split(variables_sep));
+            variablesList = List.of(variables.split(variables_separator));
             return variablesList;
         }
         return variablesList;

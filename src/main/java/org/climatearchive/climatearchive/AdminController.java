@@ -39,22 +39,22 @@ public class AdminController {
     @Value("${models}")
     private String new_models;
 
-    @Value("${model_sep}")
-    private String model_sep;
+    @Value("${model_separator}")
+    private String model_separator;
 
     @Value("${model_templates}")
     private String model_templates;
 
-    @Value(("${model_templates_sep}"))
-    private String model_templates_sep;
+    @Value(("${model_templates_separator}"))
+    private String model_templates_separator;
 
     private String[] model_templates_list = null;
 
     @Value("${fields}")
     private String fields;
 
-    @Value("${fields_sep}")
-    private String fields_sep;
+    @Value("${fields_separator}")
+    private String fields_separator;
 
     private List<String> fieldsList = null;
 
@@ -72,7 +72,7 @@ public class AdminController {
             return;
         }
         System.out.println("\nAdding new models\n-----------------");
-        for (String m : new_models.split(model_sep)) {
+        for (String m : new_models.split(model_separator)) {
             if (modelFormat.matcher(m).matches()) {
                 models.add(m);
             } else {
@@ -162,14 +162,14 @@ public class AdminController {
 
     private String[] getModel_templates_list() {
         if (model_templates_list == null) {
-            model_templates_list = model_templates.split(model_templates_sep);
+            model_templates_list = model_templates.split(model_templates_separator);
         }
         return  model_templates_list;
     }
 
     List<String> getFieldsList() {
         if (fieldsList == null) {
-            fieldsList = List.of(fields.split(fields_sep));
+            fieldsList = List.of(fields.split(fields_separator));
             return fieldsList;
         }
         return fieldsList;
