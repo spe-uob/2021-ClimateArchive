@@ -187,7 +187,7 @@ The following properties can be specified in the config file.
 | variables                 | The list of variables the server fetches for each model                                                                                                                                                                                                         | temp_mm_1_5m,precip_mm_srf                                           |
 | variables_separator       | The separator used for splitting the list of variables (regex)                                                                                                                                                                                                  | ,                                                                    |
 
-#### when making any changes to the config file any instances of the server must be restarted for the changes to have any effect. If using a linux service this can be done by running `systemctl restart <service name>`
+#### When making any changes to the config file any instances of the server must be restarted for the changes to have any effect. If using a linux service this can be done by running `systemctl restart <service name>`
     
 ## HTTPS
 
